@@ -16,7 +16,7 @@
 
 	@screen xs {
 		.action-bar {
-			@apply flex-row;
+			@apply flex-col;
 		}
 	}
 </style>
