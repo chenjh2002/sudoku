@@ -15,6 +15,8 @@
 	export let selected;
 	export let sameArea;
 	export let sameNumber;
+	export let strategyCell;
+	export let relativeCell;
 
 	const borderRight = (cellX !== SUDOKU_SIZE && cellX % 3 !== 0);
 	const borderRightBold = (cellX !== SUDOKU_SIZE && cellX % 3 === 0);
@@ -34,8 +36,10 @@
 		     class:selected={selected}
 		     class:same-area={sameArea}
 		     class:same-number={sameNumber}
-		     class:conflicting-number={conflictingNumber}>
-
+		     class:conflicting-number={conflictingNumber}
+			 class:strategy-cell={strategyCell}
+			 class:relative-cell={relativeCell}
+		>
 			<button class="cell-btn" on:click={cursor.set(cellX - 1, cellY - 1)}>
 				{#if candidates}
 					<Candidates {candidates} />
@@ -118,5 +122,13 @@
 
 	.conflicting-number {
 		@apply text-red-600;
+	}
+
+	.strategy-cell {
+		@apply text-green-600;
+	}
+
+	.relative-cell {
+		@apply bg-blue-600 text-white;
 	}
 </style>

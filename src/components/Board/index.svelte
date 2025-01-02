@@ -1,7 +1,7 @@
 <script>
 	import { BOX_SIZE } from '@sudoku/constants';
 	import { gamePaused } from '@sudoku/stores/game';
-	import { grid, userGrid, invalidCells } from '@sudoku/stores/grid';
+	import { grid, userGrid, invalidCells, strategyGrid } from '@sudoku/stores/grid';
 	import { settings } from '@sudoku/stores/settings';
 	import { cursor } from '@sudoku/stores/cursor';
 	import { candidates } from '@sudoku/stores/candidates';
@@ -27,6 +27,20 @@
 
 		return gridStore[cursorStore.y][cursorStore.x];
 	}
+
+	function isStrategyCell(strategyGridStore, y, x) {
+		if (x === null || y === null) return false;
+		return !strategyGridStore[y][x].isCellConstant() &&
+				strategyGridStore[y][x].getCurrentCell().strategies != null &&
+				strategyGridStore[y][x].getCurrentCell().strategies.length > 0;
+	}
+
+	function isRelativeCell(strategyGridStore, cursorStore, y, x) {
+		return 	cursorStore.x !== null && cursorStore.y !== null &&
+				isStrategyCell(strategyGridStore, cursorStore.y, cursorStore.x) &&
+				strategyGridStore[cursorStore.y][cursorStore.x].getCurrentCell().relativePos !== null &&
+				strategyGridStore[cursorStore.y][cursorStore.x].getCurrentCell().relativePos.some(cell => cell.x === x && cell.y === y);
+	}
 </script>
 
 <div class="board-padding relative z-10">
@@ -48,7 +62,10 @@
 					      userNumber={$grid[y][x] === 0}
 					      sameArea={$settings.highlightCells && !isSelected($cursor, x, y) && isSameArea($cursor, x, y)}
 					      sameNumber={$settings.highlightSame && value && !isSelected($cursor, x, y) && getValueAtCursor($userGrid, $cursor) === value}
-					      conflictingNumber={$settings.highlightConflicting && $grid[y][x] === 0 && $invalidCells.includes(x + ',' + y)} />
+					      conflictingNumber={$settings.highlightConflicting && $grid[y][x] === 0 && $invalidCells.includes(x + ',' + y)}
+						  strategyCell={isStrategyCell($strategyGrid, y, x)}
+						  relativeCell={isRelativeCell($strategyGrid, $cursor, y, x)}
+					/>
 				{/each}
 			{/each}
 
