@@ -1,5 +1,5 @@
 <script>
-	import { userGrid } from '@sudoku/stores/grid';
+	import { userGrid, strategyGrid } from '@sudoku/stores/grid';
 	import { cursor } from '@sudoku/stores/cursor';
 	import { notes } from '@sudoku/stores/notes';
 	import { candidates } from '@sudoku/stores/candidates';
@@ -22,6 +22,7 @@
 				}
 
 				userGrid.set($cursor, num);
+				strategyGrid.set($cursor, num);
 			}
 		}
 	}
