@@ -41,7 +41,7 @@
 			 class:relative-cell={relativeCell}
 		>
 			<button class="cell-btn" on:click={cursor.set(cellX - 1, cellY - 1)}>
-				{#if candidates}
+				{#if candidates && userNumber}
 					<Candidates {candidates} />
 				{:else}
 					<span class="cell-text">{value || ''}</span>
