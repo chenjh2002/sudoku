@@ -1,6 +1,6 @@
 <script>
   import {candidates} from '@sudoku/stores/candidates';
-  import {userGrid} from '@sudoku/stores/grid';
+  import {userGrid, strategyGrid } from '@sudoku/stores/grid';
   import {cursor} from '@sudoku/stores/cursor';
   import {hints} from '@sudoku/stores/hints';
   import {notes} from '@sudoku/stores/notes';
@@ -8,6 +8,7 @@
   import {keyboardDisabled} from '@sudoku/stores/keyboard';
   import {gamePaused} from '@sudoku/stores/game';
   import { branchCounter } from '@sudoku/strategy/baseStrategy';
+  import { strategyManager } from '@sudoku/strategy/strategyManager';
 
   $: hintsAvailable = $hints > 0;
   $: branchBackAvailable = $branchCounter > 0;
@@ -20,7 +21,11 @@
 
       // TODO apply hint with specific strategy
       // ignore the cursor and push the strategy in global
-      userGrid.applyHint($cursor);
+      // userGrid.applyHint($cursor);
+      strategyManager.getIsUsingStrategy().set(true);
+      strategyGrid.increaseTimeStep();
+      const strategyApplyCell = strategyManager.apply($strategyGrid);
+      strategyApplyCell.forEach(pos => strategyGrid.setCurrentCell(pos));
     }
   }
 </script>
@@ -52,7 +57,7 @@
     </button>
 
     <button class="btn btn-round btn-badge"
-            disabled={$keyboardDisabled || !hintsAvailable || $userGrid[$cursor.y][$cursor.x] !== 0}
+            disabled={$keyboardDisabled || !hintsAvailable}
             on:click={handleHint} title="Hints ({$hints})">
         <svg class="icon-outline" fill="none" stroke="currentColor" viewBox="0 0 24 24"
              xmlns="http://www.w3.org/2000/svg">

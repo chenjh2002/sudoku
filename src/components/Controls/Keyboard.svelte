@@ -3,6 +3,7 @@
 	import { cursor } from '@sudoku/stores/cursor';
 	import { notes } from '@sudoku/stores/notes';
 	import { candidates } from '@sudoku/stores/candidates';
+	import { strategyManager } from '@sudoku/strategy/strategyManager';
 
 	// TODO: Improve keyboardDisabled
 	import { keyboardDisabled } from '@sudoku/stores/keyboard';
@@ -22,6 +23,9 @@
 				}
 
 				userGrid.set($cursor, num);
+
+				strategyManager.getIsUsingStrategy().set(false);
+				strategyGrid.increaseTimeStep();
 				strategyGrid.set($cursor, num);
 			}
 		}

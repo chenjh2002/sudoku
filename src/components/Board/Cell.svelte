@@ -29,7 +29,6 @@
      class:border-r-4={borderRightBold}
      class:border-b={borderBottom}
      class:border-b-4={borderBottomBold}>
-
 	{#if !disabled}
 		<div class="cell-inner"
 		     class:user-number={userNumber}
@@ -41,8 +40,10 @@
 			 class:relative-cell={relativeCell}
 		>
 			<button class="cell-btn" on:click={cursor.set(cellX - 1, cellY - 1)}>
-				{#if candidates && userNumber}
-					<Candidates {candidates} />
+				{#if candidates.length > 1 && strategyCell }
+					<Candidates {candidates} gridRow={cellY - 1} gridCol={cellX - 1}/>
+				{:else if candidates.length === 1}
+					<span class="cell-text">{candidates[0] || ''}</span>
 				{:else}
 					<span class="cell-text">{value || ''}</span>
 				{/if}
@@ -125,7 +126,7 @@
 	}
 
 	.strategy-cell {
-		@apply text-green-600;
+		@apply bg-green-400 text-green-200;
 	}
 
 	.relative-cell {
