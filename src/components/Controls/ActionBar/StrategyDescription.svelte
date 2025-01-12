@@ -20,7 +20,7 @@
         {#if index === $strategyGrid[$cursor.y][$cursor.x].strategies.length - 1}
             <span class=strategy-description-text>{strategy.strategyDescription()}</span>
         {:else}
-            <span class=strategy-description-text>{strategy.strategyDescription()} + " + "</span>
+            <span class=strategy-description-text>{strategy.strategyDescription()} + </span>
         {/if}
     {/each}
 </div>
@@ -28,7 +28,7 @@
 
 <style>
     .strategy-description-board {
-        @apply flex flex-wrap justify-evenly self-end pr-0 border-r-2;
+        @apply flex flex-wrap justify-evenly self-end;
     }
 
     .strategy-description-text {
