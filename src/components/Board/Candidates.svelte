@@ -20,13 +20,13 @@
 
 <div class="candidate-grid">
 	{#each CANDIDATE_COORDS as [row, col], index}
-		<div class="candidate row-start-{row} col-start-{col}"
+		<button class="candidate row-start-{row} col-start-{col}"
 		     class:invisible={!candidates.includes(index + 1)}
 		     class:visible={candidates.includes(index + 1)}
-			 on:click={tryToSetCandidate(index + 1)}
+			 on:click={() => tryToSetCandidate(index + 1)}
 		>
 			{index + 1}
-		</div>
+		</button>
 	{/each}
 </div>
 
