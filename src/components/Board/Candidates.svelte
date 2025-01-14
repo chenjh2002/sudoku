@@ -2,6 +2,8 @@
 	import { CANDIDATE_COORDS } from '@sudoku/constants';
 	import { strategyManager } from '@sudoku/strategy/strategyManager';
 	import { strategyGrid } from '@sudoku/stores/grid';
+	import { branchBackManager } from '@sudoku/branch/branchBackManager';
+	import {get} from 'svelte/store';
 
 	export let candidates = [];
 	export let gridRow;
@@ -12,9 +14,14 @@
 			return;
 		}
 
+		// update strategy grid state
 		strategyGrid.increaseTimeStep();
 		strategyManager.getIsUsingStrategy().set(false);
 		strategyGrid.set({x: gridCol, y: gridRow}, val);
+		strategyGrid.updateCellCandidates();
+
+		// Update branch back times
+		branchBackManager.getBranchBackTimes().update(val => val + 1);
 	}
 </script>
 

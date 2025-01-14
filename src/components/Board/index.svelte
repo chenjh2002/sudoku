@@ -34,7 +34,7 @@
 	function isStrategyCell(isUsingStrategy, strategyGridStore, y, x) {
 		if (x === null || y === null) return false;
 		return isUsingStrategy &&
-				!strategyGridStore[y][x].isCellConstant() &&
+				strategyGridStore[y][x].isUserCell() &&
 				strategyGridStore[y][x].strategies != null &&
 				strategyGridStore[y][x].strategies.length > 0;
 	}
@@ -55,18 +55,19 @@
 
 		<div class="bg-white shadow-2xl rounded-xl overflow-hidden w-full h-full max-w-xl grid" class:bg-gray-200={$gamePaused}>
 
-			{#each $userGrid as row, y}
+			{#each $grid as row, y}
 				{#each row as value, x}
 					<Cell {value}
 					      cellY={y + 1}
 					      cellX={x + 1}
 					      candidates={$strategyGrid[y][x].candidates}
+						  explore={$strategyGrid[y][x].explore}
 					      disabled={$gamePaused}
 					      selected={isSelected($cursor, x, y)}
 					      userNumber={$grid[y][x] === 0}
 					      sameArea={$settings.highlightCells && !isSelected($cursor, x, y) && isSameArea($cursor, x, y)}
 					      sameNumber={$settings.highlightSame && value && !isSelected($cursor, x, y) && getValueAtCursor($userGrid, $cursor) === value}
-					      conflictingNumber={$settings.highlightConflicting && $grid[y][x] === 0 && $invalidCells.includes(x + ',' + y)}
+					      conflictingNumber={$settings.highlightConflicting && $grid[y][x] === 0 && $strategyGrid[y][x].explore !== 0 && !$strategyGrid[y][x].candidates.includes($strategyGrid[y][x].explore)}
 						  strategyCell={isStrategyCell($isUsingStrategy, $strategyGrid, y, x)}
 						  relativeCell={isRelativeCell($isUsingStrategy, $strategyGrid, $cursor, y, x)}
 					/>
