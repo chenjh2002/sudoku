@@ -4,6 +4,7 @@
 	import game from '@sudoku/game';
 	import { modal } from '@sudoku/stores/modal';
 	import { gameWon } from '@sudoku/stores/game';
+	import { branchBackManager } from '@sudoku/branch/branchBackManager';
 	import Board from './components/Board/index.svelte';
 	import Controls from './components/Controls/index.svelte';
 	import Header from './components/Header/index.svelte';
@@ -13,6 +14,8 @@
 		if (won) {
 			game.pause();
 			modal.show('gameover');
+			branchBackManager.getBranchBackTimes().set(0);
+			branchBackManager.resetBranchBackSteps();
 		}
 	});
 

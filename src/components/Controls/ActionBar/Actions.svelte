@@ -22,9 +22,10 @@
         candidates.clear($cursor);
       }
 
-      // TODO apply hint with specific strategy
-      // ignore the cursor and push the strategy in global
-      // userGrid.applyHint($cursor);
+      if (get(strategyManager.getIsUsingStrategy())) {
+        branchBackManager.getBranchBackTimes().update(val => val + 1);
+      }
+
       strategyManager.getIsUsingStrategy().set(true);
       strategyGrid.increaseTimeStep();
       const strategyApplyCell = strategyManager.apply($strategyGrid, get(strategyGrid.getTimeStep()));

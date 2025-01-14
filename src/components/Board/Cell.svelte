@@ -44,6 +44,8 @@
 			<button class="cell-btn" on:click={cursor.set(cellX - 1, cellY - 1)}>
 				{#if candidates.length > 1 && (strategyCell || relativeCell)}
 					<Candidates {candidates} gridRow={cellY - 1} gridCol={cellX - 1}/>
+				{:else if candidates.length ===  1 && relativeCell}
+					<span class="cell-text">{candidates[0]} </span>
 				{:else}
 					<span class="cell-text">{explore || value || ''} </span>
 				{/if}
