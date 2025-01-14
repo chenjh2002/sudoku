@@ -3,6 +3,7 @@
 	import { pauseGame, resumeGame } from '@sudoku/game';
 	import { gamePaused } from '@sudoku/stores/game';
 	import { settings } from '@sudoku/stores/settings';
+	import StrategyDescription from './StrategyDescription.svelte';
 </script>
 
 <div class="timer-container">
@@ -19,7 +20,11 @@
 	{#if $settings.displayTimer}
 		<span class="timer-text" title="Time">{$timer}</span>
 	{/if}
+
 </div>
+
+<StrategyDescription />
+
 
 <style>
 	.timer-container {

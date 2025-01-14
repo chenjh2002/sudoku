@@ -5,7 +5,6 @@
 
 <div class="action-bar space-y-3 xs:space-y-0">
 	<Timer />
-
 	<Actions />
 </div>
 

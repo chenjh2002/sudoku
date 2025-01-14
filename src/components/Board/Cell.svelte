@@ -3,11 +3,13 @@
 	import { fade } from 'svelte/transition';
 	import { SUDOKU_SIZE } from '@sudoku/constants';
 	import { cursor } from '@sudoku/stores/cursor';
+	import { strategyGrid } from '@sudoku/stores/grid';
 
 	export let value;
 	export let cellX;
 	export let cellY;
 	export let candidates;
+	export let explore;
 
 	export let disabled;
 	export let conflictingNumber;
@@ -29,7 +31,6 @@
      class:border-r-4={borderRightBold}
      class:border-b={borderBottom}
      class:border-b-4={borderBottomBold}>
-
 	{#if !disabled}
 		<div class="cell-inner"
 		     class:user-number={userNumber}
@@ -41,10 +42,10 @@
 			 class:relative-cell={relativeCell}
 		>
 			<button class="cell-btn" on:click={cursor.set(cellX - 1, cellY - 1)}>
-				{#if candidates && userNumber}
-					<Candidates {candidates} />
+				{#if candidates.length > 1 && (strategyCell || relativeCell)}
+					<Candidates {candidates} gridRow={cellY - 1} gridCol={cellX - 1}/>
 				{:else}
-					<span class="cell-text">{value || ''}</span>
+					<span class="cell-text">{explore || value || ''} </span>
 				{/if}
 			</button>
 
@@ -125,7 +126,7 @@
 	}
 
 	.strategy-cell {
-		@apply text-green-600;
+		@apply bg-green-400 text-green-200;
 	}
 
 	.relative-cell {

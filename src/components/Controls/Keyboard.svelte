@@ -3,9 +3,12 @@
 	import { cursor } from '@sudoku/stores/cursor';
 	import { notes } from '@sudoku/stores/notes';
 	import { candidates } from '@sudoku/stores/candidates';
+	import { strategyManager } from '@sudoku/strategy/strategyManager';
+	import { branchBackManager } from '@sudoku/branch/branchBackManager';
 
 	// TODO: Improve keyboardDisabled
 	import { keyboardDisabled } from '@sudoku/stores/keyboard';
+	import {get} from 'svelte/store';
 
 	function handleKeyButton(num) {
 		if (!$keyboardDisabled) {
@@ -21,8 +24,20 @@
 					candidates.clear($cursor);
 				}
 
-				userGrid.set($cursor, num);
-				strategyGrid.set($cursor, num);
+				// userGrid.set($cursor, num);
+
+				if (get(strategyManager.getIsUsingStrategy())) {
+					branchBackManager.getBranchBackTimes().update(val => val + 1);
+				}
+
+				// Update strategy manager state
+				strategyManager.getIsUsingStrategy().set(false);
+
+				// Update strategy grid state
+				strategyGrid.increaseTimeStep();
+				strategyGrid.set(get(cursor), num);
+				strategyGrid.updateCellCandidates([get(cursor)]);
+
 			}
 		}
 	}
