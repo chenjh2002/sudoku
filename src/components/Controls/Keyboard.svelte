@@ -35,6 +35,7 @@
 
 				// Update strategy grid state
 				strategyGrid.increaseTimeStep();
+				get(strategyGrid.getStrategyGrid()).map(row => row.map(cell => { cell.resetRelativePos(); cell.resetStrategies(); }));
 				strategyGrid.set(get(cursor), num);
 				strategyGrid.updateCellCandidates([get(cursor)]);
 
