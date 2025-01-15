@@ -26,7 +26,6 @@
         branchBackManager.getBranchBackTimes().update(val => val + 1);
       }
 
-      strategyManager.getIsUsingStrategy().set(true);
       strategyGrid.increaseTimeStep();
       const strategyApplyCell = strategyManager.apply($strategyGrid, get(strategyGrid.getTimeStep()));
       strategyApplyCell.forEach(pos => strategyGrid.setCurrentCell(pos));
@@ -34,7 +33,10 @@
 
       // Update branch back manager
       if (strategyApplyCell.length > 0) {
+        strategyManager.getIsUsingStrategy().set(true);
         branchBackManager.addBranchBackTimeStep(get(strategyGrid.getTimeStep()));
+      } else {
+        strategyManager.getIsUsingStrategy().set(false);
       }
     }
   }
