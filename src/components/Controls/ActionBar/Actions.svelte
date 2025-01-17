@@ -27,14 +27,23 @@
       }
 
       strategyGrid.increaseTimeStep();
-      const strategyApplyCell = strategyManager.apply($strategyGrid, get(strategyGrid.getTimeStep()));
+      const strategyApplyCell = strategyManager.apply($strategyGrid);
       strategyApplyCell.forEach(pos => strategyGrid.setCurrentCell(pos));
       strategyGrid.updateCellCandidates();
 
       // Update branch back manager
       if (strategyApplyCell.length > 0) {
         strategyManager.getIsUsingStrategy().set(true);
-        branchBackManager.addBranchBackTimeStep(get(strategyGrid.getTimeStep()));
+        let hasSingleValue = false;
+        for (let pos of strategyApplyCell) {
+          if ($strategyGrid[pos.y][pos.x].candidates.length === 1) {
+            hasSingleValue = true;
+          }
+        }
+        if (hasSingleValue) {
+          hints.useHint();
+          branchBackManager.addBranchBackTimeStep(get(strategyGrid.getTimeStep()));
+        }
       } else {
         strategyManager.getIsUsingStrategy().set(false);
       }
