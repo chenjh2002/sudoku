@@ -22,7 +22,7 @@
         candidates.clear($cursor);
       }
 
-      if (get(strategyManager.getIsUsingStrategy())) {
+      if (get(strategyManager.getIsUsingStrategy()) && get(strategyManager.getIsGenerateSingleCandidate())) {
         branchBackManager.getBranchBackTimes().update(val => val + 1);
       }
 
@@ -34,13 +34,7 @@
       // Update branch back manager
       if (strategyApplyCell.length > 0) {
         strategyManager.getIsUsingStrategy().set(true);
-        let hasSingleValue = false;
-        for (let pos of strategyApplyCell) {
-          if ($strategyGrid[pos.y][pos.x].candidates.length === 1) {
-            hasSingleValue = true;
-          }
-        }
-        if (hasSingleValue) {
+        if (get(strategyManager.getIsGenerateSingleCandidate())) {
           hints.useHint();
           branchBackManager.addBranchBackTimeStep(get(strategyGrid.getTimeStep()));
         }

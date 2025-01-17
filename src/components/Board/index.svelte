@@ -1,5 +1,5 @@
 <script>
-	import { BOX_SIZE } from '@sudoku/constants';
+	import { BOX_SIZE, SUDOKU_SIZE } from '@sudoku/constants';
 	import { gamePaused } from '@sudoku/stores/game';
 	import { grid, userGrid, invalidCells, strategyGrid } from '@sudoku/stores/grid';
 	import { settings } from '@sudoku/stores/settings';
@@ -45,6 +45,37 @@
 				strategyGridStore[cursorStore.y][cursorStore.x].relativePos !== null &&
 				strategyGridStore[cursorStore.y][cursorStore.x].relativePos.some(cell => cell.x === x && cell.y === y);
 	}
+
+	function isInValidateCandidate(strategyGridStore, y, x) {
+		if (!(strategyGridStore[y][x].isUserCell() && strategyGridStore[y][x].explore !== 0)) return false;
+
+		if (strategyGridStore[y][x].isUserCell() && strategyGridStore[y][x].candidates.length === 0) return true;
+
+		// Check for row
+		for (let col = 0; col < SUDOKU_SIZE; col++) {
+			if (strategyGridStore[y][col].isCellConstant() && strategyGridStore[y][col].getCurrentCell() === strategyGridStore[y][x].explore && col !== x)
+				return true;
+		}
+
+		// Check for col
+		for (let row = 0; row < SUDOKU_SIZE; row++) {
+			if (strategyGridStore[row][x].isCellConstant() && strategyGridStore[row][x].getCurrentCell() === strategyGridStore[y][x].explore && row !== y)
+				return true;
+		}
+
+		// Check for box
+		const startRow = Math.floor(y / BOX_SIZE) * BOX_SIZE;
+		const startCol = Math.floor(x / BOX_SIZE) * BOX_SIZE;
+		for (let i = startRow; i < startRow + BOX_SIZE; i++) {
+			for (let j = startCol; j < startCol +BOX_SIZE; j++) {
+				if (i !== y && j !== x && strategyGridStore[i][j].isCellConstant() && strategyGridStore[i][j].getCurrentCell() === strategyGridStore[y][x].explore) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
 </script>
 
 <div class="board-padding relative z-10">
@@ -70,6 +101,7 @@
 					      conflictingNumber={$settings.highlightConflicting && $grid[y][x] === 0 && $strategyGrid[y][x].explore !== 0 && !$strategyGrid[y][x].candidates.includes($strategyGrid[y][x].explore)}
 						  strategyCell={isStrategyCell($isUsingStrategy, $strategyGrid, y, x)}
 						  relativeCell={isRelativeCell($isUsingStrategy, $strategyGrid, $cursor, y, x)}
+						  invalidCandidate={isInValidateCandidate($strategyGrid, y, x)}
 					/>
 				{/each}
 			{/each}

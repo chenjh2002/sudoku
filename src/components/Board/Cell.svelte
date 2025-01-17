@@ -19,6 +19,7 @@
 	export let sameNumber;
 	export let strategyCell;
 	export let relativeCell;
+	export let invalidCandidate;
 
 	const borderRight = (cellX !== SUDOKU_SIZE && cellX % 3 !== 0);
 	const borderRightBold = (cellX !== SUDOKU_SIZE && cellX % 3 === 0);
@@ -40,12 +41,15 @@
 		     class:conflicting-number={conflictingNumber}
 			 class:strategy-cell={strategyCell}
 			 class:relative-cell={relativeCell}
+			 class:invalid-candidate={invalidCandidate}
 		>
 			<button class="cell-btn" on:click={cursor.set(cellX - 1, cellY - 1)}>
 				{#if candidates.length > 1 && (strategyCell || relativeCell)}
 					<Candidates {candidates} gridRow={cellY - 1} gridCol={cellX - 1}/>
 				{:else if candidates.length ===  1 && relativeCell}
 					<span class="cell-text">{candidates[0]} </span>
+				{:else if candidates.length === 0 && strategyCell}
+					<span class="cell-text">0</span>
 				{:else}
 					<span class="cell-text">{explore || value || ''} </span>
 				{/if}
@@ -133,5 +137,9 @@
 
 	.relative-cell {
 		@apply bg-blue-600 text-white;
+	}
+
+	.invalid-candidate {
+		@apply text-red-600;
 	}
 </style>

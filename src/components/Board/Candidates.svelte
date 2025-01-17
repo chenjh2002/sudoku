@@ -17,6 +17,7 @@
 		// update strategy grid state
 		strategyGrid.increaseTimeStep();
 		strategyManager.getIsUsingStrategy().set(false);
+		strategyManager.getIsGenerateSingleCandidate().set(true);
 		get(strategyGrid.getStrategyGrid()).map(row => row.map(cell => { cell.resetRelativePos(); cell.resetStrategies(); }));
 		strategyGrid.set({x: gridCol, y: gridRow}, val);
 		strategyGrid.updateCellCandidates();
