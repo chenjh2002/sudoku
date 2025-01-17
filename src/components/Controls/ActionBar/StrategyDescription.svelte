@@ -18,9 +18,9 @@
 <div class=strategy-description-board>
     {#each $strategyGrid[$cursor.y][$cursor.x].strategies as strategy, index}
         {#if index === $strategyGrid[$cursor.y][$cursor.x].strategies.length - 1}
-            <span class=strategy-description-text>{strategy.strategyDescription()}</span>
+            <span class=strategy-description-text> {strategy.strategyDescription()}</span>
         {:else}
-            <span class=strategy-description-text>{strategy.strategyDescription()} + </span>
+            <span class=strategy-description-text> {strategy.strategyDescription()} +</span>
         {/if}
     {/each}
 </div>
